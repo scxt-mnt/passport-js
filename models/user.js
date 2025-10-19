@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
-const userSchema = mongoose.schema(
+const userSchema = mongoose.Schema(
     {
         name:{
-            Type: String,
-            requred: true
+            type: String,
+            required: true
         },
         age: {
-            Type: Number,
-            requred: true
+            type: Number,
+            required: true,
         }
     }
 );

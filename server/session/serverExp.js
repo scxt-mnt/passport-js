@@ -57,7 +57,12 @@ app.post('/api/user', async (req, res) => {
 
 
 app.get('/home', (req, res) => {
-    req.session.viewCount = (req.session.viewCount || 0) + 1;
+    
+    if(req.session.viewCount){
+        req.session.viewCount = (req.session.viewCount || 0) + 1;
+    }else{
+        req.session.viewCount = req.session.viewCount + 1;
+    }
     req.session.save(err => {
         if(err) {
             return res.status(500).send("Session error");

@@ -13,38 +13,35 @@ const PORT = process.env.APP_PORT;
 const DB_URL = process.env.APP_URL;
 const SECRET = process.env.SECRET;
 
+//middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
+
+const sessionStore = MongoStore.create({
+    mongoUrl: DB_URL,
+    collectionName: "sessions"
+});
+
+app.use(session({
+    secret: SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}))
+
+
 
 mongoose.connect(DB_URL)
     .then(() => {
         app.listen(PORT, () => console.log("listening to port " + PORT))
 
-
-        const sessionStore = MongoStore.create({
-            mongoUrl: DB_URL,
-            collectionName: "sessions"
-        });
-
-        //middlewares
-        app.use(express.json());
-        app.use(express.urlencoded({ extended: true }));
-        app.use(cors());
-
-        app.use(session({
-            secret: SECRET,
-            resave: false,
-            saveUninitialized: true,
-            store: sessionStore,
-            cookie: {
-                maxAge: 1000 * 60 * 60 * 24
-            }
-        }))
-
-
     })
     .catch((err) => { console.log(err) });
-
-
-
 
 
 
@@ -57,3 +54,14 @@ app.post('/api/user', async (req, res) => {
         res.status(500).send(err);
     }
 })
+
+
+app.get('/home', (req, res) => {
+    req.session.viewCount = (req.session.viewCount || 0) + 1;
+    req.session.save(err => {
+        if(err) {
+            return res.status(500).send("Session error");
+        }
+        res.send(`<h1>Hello world</h1><p>Views: ${req.session.viewCount}</p>`);
+    });
+});

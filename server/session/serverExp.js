@@ -55,18 +55,14 @@ app.post('/api/user', async (req, res) => {
     }
 })
 
+const middleware1 = (req, res, next) => {
+    res.send("<h1>middleware1 started</h1>");
+    next();
+}
 
+app.use(middleware1);
 app.get('/home', (req, res) => {
-    
-    if(req.session.viewCount){
-        req.session.viewCount = (req.session.viewCount || 0) + 1;
-    }else{
-        req.session.viewCount = req.session.viewCount + 1;
-    }
-    req.session.save(err => {
-        if(err) {
-            return res.status(500).send("Session error");
-        }
-        res.send(`<h1>Hello world</h1><p>Views: ${req.session.viewCount}</p>`);
-    });
+    res.send("<h1>hello world</h1>");
 });
+
+

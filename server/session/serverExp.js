@@ -45,24 +45,3 @@ mongoose.connect(DB_URL)
 
 
 
-
-app.post('/api/user', async (req, res) => {
-    try {
-        const storeData = await user.create(req.body);
-        res.status(200).json({ msg: "successfully sent", content: storeData });
-    } catch (err) {
-        res.status(500).send(err);
-    }
-})
-
-const middleware1 = (req, res, next) => {
-    res.send("<h1>middleware1 started</h1>");
-    next();
-}
-
-app.use(middleware1);
-app.get('/home', (req, res) => {
-    res.send("<h1>hello world</h1>");
-});
-
-

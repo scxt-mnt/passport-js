@@ -17,6 +17,7 @@ const SECRET = process.env.SECRET;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.set("view engine", "ejs");
 
 
 const sessionStore = MongoStore.create({
@@ -43,5 +44,9 @@ mongoose.connect(DB_URL)
     })
     .catch((err) => { console.log(err) });
 
+
+app.get('/',  (req, res, next) => {
+    res.render('home');
+})
 
 

@@ -5,6 +5,7 @@ import cors from 'cors';
 import user from '../../models/user.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import router from '../../routes/auth-routes.js'
 dotenv.config();
 
 const app = express();
@@ -44,9 +45,7 @@ mongoose.connect(DB_URL)
     })
     .catch((err) => { console.log(err) });
 
-
-app.get('/',  (req, res, next) => {
-    res.render('home');
-})
+app.use('/auth', router);
+ 
 
 

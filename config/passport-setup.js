@@ -16,7 +16,10 @@ passport.use(
         clientID: CLIENTID,
         clientSecret: CLIENTSECRET,
         callbackURL: CALLBACKURL
-    }, () => {
+    }, (accessToken, refreshToken, profile, done) => {
         // passport call back fucntion
+        console.log(profile);
     }
     ))
+
+    export default passport

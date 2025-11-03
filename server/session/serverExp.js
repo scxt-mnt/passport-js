@@ -6,7 +6,7 @@ import user from '../../models/user.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import router from '../../routes/auth-routes.js'
-dotenv.config();
+import passport from 'passport';
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.set("view engine", "ejs");
+app.use('/auth', router);
 
 
 const sessionStore = MongoStore.create({
@@ -36,6 +37,7 @@ app.use(session({
     }
 }))
 
+app.use(passport.initialize());
 
 
 mongoose.connect(DB_URL)
@@ -45,7 +47,6 @@ mongoose.connect(DB_URL)
     })
     .catch((err) => { console.log(err) });
 
-app.use('/auth', router);
  
 
 

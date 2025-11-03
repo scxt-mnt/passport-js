@@ -1,17 +1,22 @@
 import passport from 'passport';
-import googleStrategy from 'passport-google-oauth';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const CLIENTID = process.env.ClientId;
 const CLIENTSECRET = process.env.ClientSecret;
+const CALLBACKURL = process.env.callbackURL;
+
 
 console.log(CLIENTID);
 
 passport.use(
-    new googleStrategy({
-    // client id and secrets
-}), () => {
-    // passport call back fucntion
-})
+    new GoogleStrategy({
+        clientID: CLIENTID,
+        clientSecret: CLIENTSECRET,
+        callbackURL: CALLBACKURL
+    }, () => {
+        // passport call back fucntion
+    }
+    ))

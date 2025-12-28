@@ -1,6 +1,8 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import dotenv from 'dotenv';
+import user from '../models/user.js';
+
 
 dotenv.config();
 
@@ -16,10 +18,15 @@ passport.use(
         clientID: CLIENTID,
         clientSecret: CLIENTSECRET,
         callbackURL: CALLBACKURL
-    }, (accessToken, refreshToken, profile, done) => {
-        // passport call back fucntion
-        console.log(profile);
+    }, async function (accessToken, refreshToken, profile, done) {
+        // passport call back function
+        try {
+            const nameUser = new user({ name: profile.name.givenName });
+            await nameUser.save()
+            .then(console.log("successfully saved")
+            .catch("didnt been saved"));
+        } catch (e) { console.log(e.message) };
     }
     ))
 
-    export default passport
+export default passport

@@ -2,12 +2,11 @@ import express, { urlencoded } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import user from '../../models/user.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import router from '../../routes/auth-routes.js'
 import passport from 'passport';
-import  '../../config/passport-setup.js'
+import '../../config/passport-setup.js';
 dotenv.config();
 
 const app = express();
@@ -17,6 +16,7 @@ const DB_URL = process.env.APP_URL;
 const SECRET = process.env.SECRET;
 
 //middlewares
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -39,16 +39,13 @@ app.use(session({
     }
 }))
 
-app.use(passport.initialize());
-
 
 mongoose.connect(DB_URL)
     .then(() => {
         app.listen(PORT, () => console.log("listening to port " + PORT))
+    }).catch((err) => { console.log(err) });
 
-    })
-    .catch((err) => { console.log(err) });
 
- 
+
 
 

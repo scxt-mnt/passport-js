@@ -16,13 +16,10 @@ const DB_URL = process.env.APP_URL;
 const SECRET = process.env.SECRET;
 
 //middlewares
-app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.set("view engine", "ejs");
-app.use('/auth', router);
-
 
 const sessionStore = MongoStore.create({
     mongoUrl: DB_URL,
@@ -39,11 +36,16 @@ app.use(session({
     }
 }))
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/auth', router);
+
 
 mongoose.connect(DB_URL)
     .then(() => {
+        console.log("mongoDb connected!");
         app.listen(PORT, () => console.log("listening to port " + PORT))
-    }).catch((err) => { console.log(err) });
+    }).catch((err) => { console.log(err.message) });
 
 
 

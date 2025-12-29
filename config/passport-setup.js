@@ -22,11 +22,26 @@ passport.use(
         // passport call back function
         try {
             const nameUser = new user({ name: profile.name.givenName });
-            await nameUser.save()
-            .then(console.log("successfully saved")
-            .catch("didnt been saved"));
-        } catch (e) { console.log(e.message) };
+            await nameUser.save();
+            return done(null, nameUser);
+        } catch (e) { 
+            console.log(e.message);
+            return done(e);
+        }
     }
     ))
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const foundUser = await user.findById(id);
+        done(null, foundUser);
+    } catch (e) {
+        done(e);
+    }
+});
 
 export default passport

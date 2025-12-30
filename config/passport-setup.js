@@ -20,9 +20,19 @@ passport.use(
         callbackURL: CALLBACKURL
     }, function (accessToken, refreshToken, profile, done) {
         // passport callback function
-        new user({ name: profile.name.givenName, googleId: profile.id }).save()
-            .then((data) => { console.log("user saved" + data.name), done(null, data.googleId) })
-            .catch((err) => { console.log(err), done(err) });}
+        user.findOne({ googleId: profile.id })
+            .then((newUser) => {
+                if (newUser) {
+                    //user exist
+                    console.log("user exist " + newUser.name);
+                    return done(null, newUser.googleId)
+                } else {
+                    new user({ name: profile.name.givenName, googleId: profile.id }).save()
+                        .then((data) => { console.log("user saved " + data.name), done(null, data.googleId) })
+                        .catch((err) => { console.log(err), done(err) });
+                }
+            })
+    }
     ))
 
 export default passport

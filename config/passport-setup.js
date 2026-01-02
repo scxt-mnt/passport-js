@@ -10,8 +10,10 @@ const CLIENTID = process.env.ClientId;
 const CLIENTSECRET = process.env.ClientSecret;
 const CALLBACKURL = process.env.callbackURL;
 
+passport.serializeUser((user, done) => {
+    done(null, user);
+}) 
 
-console.log(CLIENTID);
 
 passport.use(
     new GoogleStrategy({

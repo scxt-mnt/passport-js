@@ -11,8 +11,16 @@ const CLIENTSECRET = process.env.ClientSecret;
 const CALLBACKURL = process.env.callbackURL;
 
 passport.serializeUser((user, done) => {
-    done(null, user);
-}) 
+    done(null, user.id);
+})
+
+passport.deserializeUser((id, done) => {
+    user.findById(id).then(
+        (id) => {
+            done(null, id);
+        }
+    )
+})
 
 
 passport.use(
